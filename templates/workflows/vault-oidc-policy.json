@@ -1,0 +1,13 @@
+{
+  "role_name": "app-01-nebula-role",
+  "token_policies": ["app-01-nebula-policy"],
+  "token_ttl": 3600,
+  "token_max_ttl": 7200,
+  "bound_audiences": ["https://github.com/org/appFactory"],
+  "user_claim": "actor",
+  "bound_claims": {
+    "repository": "org/appFactory",
+    "ref": "refs/heads/feature/app-01-nebula"
+  },
+  "bound_claims_type": "glob"
+}

@@ -1,0 +1,84 @@
+name: Reusable App Factory Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      app-id:
+        required: true
+        type: string
+        description: "The unique identifier of the app (e.g. app-01)"
+      app-name:
+        required: true
+        type: string
+        description: "The codename of the app (e.g. nebula)"
+      app-path:
+        required: true
+        type: string
+        description: "The folder path of the app (e.g. apps/app-01-nebula)"
+      vault-role:
+        required: true
+        type: string
+        description: "The role name in HashiCorp Vault mapped to this app"
+    secrets:
+      vault-addr:
+        required: true
+        description: "The URL of the central HashiCorp Vault instance"
+
+permissions:
+  id-token: write # Required for requesting the JWT OIDC token
+  contents: read
+
+jobs:
+  validate-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Quality Gatekeeper Scan
+        run: |
+          echo "Starting Quality Gatekeeper audit for ${{ inputs.app-id }}-${{ inputs.app-name }}"
+          echo "Scanning path: ${{ inputs.app-path }}"
+          
+          # Check for forbidden files or hardcoded credentials
+          if grep -rE "AWS_SECRET_ACCESS_KEY|SECRET_KEY|PASSWORD|PRIVATE_KEY" ${{ inputs.app-path }}; then
+            echo "ERROR: Hardcoded secrets detected in application context. Build blocked."
+            exit 1
+          fi
+          
+          # Verify local AGENTS.md inheritance
+          if [ ! -f "${{ inputs.app-path }}/AGENTS.md" ]; then
+            echo "ERROR: Local AGENTS.md missing in app directory. All factory apps must inherit governance rules."
+            exit 1
+          fi
+
+  retrieve-secrets-and-build:
+    needs: validate-and-audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Fetch Dynamic Secrets from HashiCorp Vault
+        uses: hashicorp/vault-action@v2.7.0
+        with:
+          method: jwt
+          url: ${{ secrets.vault-addr }}
+          role: ${{ inputs.vault-role }}
+          path: github-actions-oidc # Mount path of JWT auth in Vault
+          secrets: |
+            secret/data/app-factory/${{ inputs.app-id }}-${{ inputs.app-name }}/api api_key | APP_SECRET_KEY ;
+            secret/data/app-factory/${{ inputs.app-id }}-${{ inputs.app-name }}/gcs bucket_name | VAULT_GCS_BUCKET_NAME ;
+            secret/data/app-factory/${{ inputs.app-id }}-${{ inputs.app-name }}/endpoints host_address | VAULT_API_ENDPOINT
+
+      - name: Print Build Variables (Masked)
+        run: |
+          echo "OIDC Claims authenticated successfully."
+          echo "Dynamic environment bindings mounted for app path: ${{ inputs.app-path }}"
+          echo "GCS Target Bucket: $VAULT_GCS_BUCKET_NAME"
+
+      - name: Compile Application Artifact
+        run: |
+          echo "Compiling application for ${{ inputs.app-id }}-${{ inputs.app-name }}..."
+          # Insert platform-specific build instructions or fastlane calls here
+          echo "Build successful."

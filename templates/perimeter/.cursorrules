@@ -1,0 +1,18 @@
+# App Sandbox Context Boundary (.cursorrules)
+
+# Absolute Path Containment
+- Your operational scope is strictly locked to the root of this generated application directory.
+- You are explicitly forbidden from traversing up the directory tree (e.g. using `../` or reading files outside this folder) or reading file data from the parent App Factory or adjacent sandboxes.
+- Do not attempt to access or modify any files outside this workspace root.
+
+# Identity Anchoring
+- You must automatically ingest the local `agent.md` file located at the root of this workspace as your primary system prompt.
+- You must instantly adopt the specific functional persona, database schema parameters, branding guidelines, and deployment targets defined for this single application.
+
+# State Synchronization Enforcement
+- Respect strict architectural guardrails: Any modifications to the backend database schema or API data layer must automatically trigger local type-generation routines (e.g., `npm run generate-types` or equivalent) to keep the frontend mobile client perfectly synchronized.
+
+# Compilation Boundaries
+- You are restricted to writing pure, framework-agnostic mobile code (such as React Native/Expo or Flutter).
+- You are strictly barred from modifying native iOS (`ios/`) or Android (`android/`) system folders directly.
+- Native configurations (permissions, custom modules, native keys) must be declared purely through structured framework plugins (e.g., Expo config plugins or Flutter dependency declarations).

@@ -1,0 +1,43 @@
+{
+  "app_id": "APP_ID",
+  "codename": "APP_CODENAME",
+  "bundle_identifier": "com.appfactory.APP_ID_PLACEHOLDER",
+  "version": "1.0.0",
+  "branding": {
+    "primary_color": "#34A853",
+    "background_color": "#0B0F19",
+    "fonts": {
+      "headings": "Outfit",
+      "body": "Inter"
+    },
+    "style": "glassmorphic"
+  },
+  "navigation": {
+    "initial_route": "Home",
+    "routes": [
+      {
+        "name": "Home",
+        "title": "Dashboard",
+        "protected": false
+      },
+      {
+        "name": "Details",
+        "title": "Details View",
+        "protected": true
+      }
+    ]
+  },
+  "data_models": {
+    "user": {
+      "fields": {
+        "id": "uuid",
+        "email": "string",
+        "created_at": "timestamp"
+      }
+    }
+  },
+  "endpoints": {
+    "api_base_url": "https://api.APP_ID_PLACEHOLDER.factory.com",
+    "vault_secret_path": "secret/data/app-factory/APP_ID_WITH_HYPHEN"
+  }
+}

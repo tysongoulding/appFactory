@@ -1,0 +1,23 @@
+# Template Caller Workflow for Factory Apps
+# Copy this file to .github/workflows/app-[id]-[name].yml and update placeholders
+
+name: App Pipeline Trigger
+
+on:
+  push:
+    branches:
+      - main
+      - feature/app-**
+    paths:
+      - 'apps/app-04-quasar/**' # Triggers only on changes to this app's files
+
+jobs:
+  run-app-pipeline:
+    uses: ./.github/workflows/app-pipeline.yml
+    with:
+      app-id: "app-04"
+      app-name: "quasar"
+      app-path: "apps/app-04-quasar"
+      vault-role: "app-04-quasar-role"
+    secrets:
+      vault-addr: ${{ secrets.VAULT_ADDR }}

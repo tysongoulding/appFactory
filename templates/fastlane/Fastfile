@@ -1,0 +1,48 @@
+# Fastlane Fastfile
+# Manages automated compilation and deployment pipelines for iOS and Android
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Fetch certificates and build premium iOS target"
+  lane :build_ios do
+    # Provisioning profiles using match in read-only mode (secrets supplied from Vault)
+    match(
+      type: "appstore",
+      readonly: true,
+      git_url: ENV["MATCH_GIT_URL"]
+    )
+    
+    # Compile SwiftUI app target
+    build_app(
+      scheme: "App",
+      workspace: "App.xcworkspace"
+    )
+  end
+
+  desc "Deploy beta to TestFlight"
+  lane :beta do
+    build_ios
+    upload_to_testflight
+  end
+end
+
+platform :android do
+  desc "Build signed Android Bundle (AAB)"
+  lane :build_android do
+    # Execute gradle task using parameters injected from Vault env
+    gradle(
+      task: "bundle",
+      build_type: "Release",
+      project_dir: "android"
+    )
+  end
+
+  desc "Deploy Android to Google Play Console"
+  lane :deploy_play_store do
+    build_android
+    upload_to_play_store(
+      track: "internal"
+    )
+  end
+end

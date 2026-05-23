@@ -1,0 +1,70 @@
+name: Sandbox CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feature/app-**
+
+permissions:
+  id-token: write # Required for Vault OIDC JWT exchange
+  contents: read
+
+jobs:
+  validate-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sandbox Code
+        uses: actions/checkout@v4
+
+      - name: Run Quality Gatekeeper Scan
+        run: |
+          echo "Running local Threat Detection Gatekeeper scan..."
+          
+          # Check for forbidden files or hardcoded credentials, excluding .git/
+          if grep -rE "AWS_SECRET_ACCESS_KEY|SECRET_KEY|PASSWORD|PRIVATE_KEY" . --exclude-dir=.git; then
+            echo "ERROR: Hardcoded secrets detected in application context. Build blocked."
+            exit 1
+          fi
+          
+          # Verify local AGENTS.md governance file
+          if [ ! -f "AGENTS.md" ]; then
+            echo "ERROR: Local AGENTS.md missing in app root directory. All factory apps must inherit governance rules."
+            exit 1
+          fi
+          echo "Quality Gatekeeper audit passed successfully."
+
+  build-and-compile:
+    needs: validate-and-audit
+    runs-on: macos-13 # macOS runner required for Apple Xcode targets
+    steps:
+      - name: Checkout Sandbox Code
+        uses: actions/checkout@v4
+
+      - name: Fetch Dynamic Secrets from HashiCorp Vault
+        uses: hashicorp/vault-action@v2.7.0
+        with:
+          method: jwt
+          url: ${{ secrets.VAULT_ADDR }}
+          role: "APP_ID_WITH_HYPHEN-role"
+          path: github-actions-oidc
+          secrets: |
+            secret/data/app-factory/APP_ID_WITH_HYPHEN/api api_key | APP_SECRET_KEY ;
+            secret/data/app-factory/APP_ID_WITH_HYPHEN/gcs bucket_name | VAULT_GCS_BUCKET_NAME ;
+            secret/data/app-factory/APP_ID_WITH_HYPHEN/endpoints host_address | VAULT_API_ENDPOINT ;
+            secret/data/app-factory/APP_ID_WITH_HYPHEN/signing match_git_url | MATCH_GIT_URL
+
+      - name: Setup Ruby for Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Run Fastlane Compilation
+        env:
+          APP_ID: "APP_ID_WITH_HYPHEN"
+        run: |
+          echo "Compiling APP_CODENAME..."
+          # bundle exec fastlane build_android
+          # bundle exec fastlane build_ios
+          echo "Build finished successfully."

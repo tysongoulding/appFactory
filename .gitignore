@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# IDEs & Editor temp files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vault & Local Temp
+tmp/
+/tmp/
+*.tmp
+*.log

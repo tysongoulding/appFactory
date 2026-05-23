@@ -1,0 +1,11 @@
+# Fastlane Appfile
+# Configures Apple Developer portal and App Store Connect credentials
+
+app_identifier("com.appfactory.APP_ID_PLACEHOLDER")
+apple_id("dev-admin@appfactory.com")
+
+# Apple Developer Portal Team ID
+team_id("ABCDE12345")
+
+# App Store Connect Team ID
+itc_team_id("123456789")

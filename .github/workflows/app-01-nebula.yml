@@ -1,0 +1,23 @@
+# Template Caller Workflow for Factory Apps
+# Copy this file to .github/workflows/app-[id]-[name].yml and update placeholders
+
+name: App Pipeline Trigger
+
+on:
+  push:
+    branches:
+      - main
+      - feature/app-**
+    paths:
+      - 'apps/app-01-nebula/**' # Triggers only on changes to this app's files
+
+jobs:
+  run-app-pipeline:
+    uses: ./.github/workflows/app-pipeline.yml
+    with:
+      app-id: "app-01"
+      app-name: "nebula"
+      app-path: "apps/app-01-nebula"
+      vault-role: "app-01-nebula-role"
+    secrets:
+      vault-addr: ${{ secrets.VAULT_ADDR }}
