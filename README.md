@@ -6,6 +6,25 @@ Using the **agency-agents** paradigm, the factory serves as a deterministic comp
 
 ---
 
+## 🚀 Quick Start: Installation & Uninstallation
+
+Since this is a public repository, you can set up or tear down the orchestrator using automated PowerShell one-liners in your local terminal:
+
+### One-Line Install
+Open PowerShell and run the following command to verify dependencies, download, and clone the engine:
+```powershell
+irm https://raw.githubusercontent.com/tysongoulding/appFactory/main/scripts/install.ps1 | iex
+```
+
+### One-Line Uninstall
+To completely remove the orchestrator directory and clean up:
+```powershell
+irm https://raw.githubusercontent.com/tysongoulding/appFactory/main/scripts/uninstall.ps1 | iex
+```
+*Note: Any laterally spawned application sandboxes parallel to the factory are safely preserved to prevent custom source code deletion. You can manually remove those when desired.*
+
+---
+
 ## 🏗️ Topographical Strategy & Lateral Sandboxes
 
 To prevent context drift, token cross-pollination, and directory fragmentation, the monorepo enforces a strict **lateral workspace structure**:
