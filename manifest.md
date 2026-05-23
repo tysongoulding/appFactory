@@ -46,6 +46,7 @@ The Factory Manager tracks the lifecycle of all generated apps using the matrix 
 | `app-05` | Horizon | iOS | Mobile App Builder Epsilon | `Integrated` | `../app-05-horizon` | `app-05-horizon-policy` |
 | `app-06` | Spectra | Android | Mobile App Builder Zeta | `Integrated` | `../app-06-spectra` | `app-06-spectra-policy` |
 | `app-07` | Eclipse | Android | Mobile App Builder Eta | `Integrated` | `../app-07-eclipse` | `app-07-eclipse-policy` |
+| `app-08` | Beacon | Cross-Platform | Mobile App Builder Theta | `Integrated` | `../app-08-beacon` | `app-08-beacon-policy` |
 
 
 ---
