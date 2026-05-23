@@ -8,18 +8,30 @@ Using the **agency-agents** paradigm, the factory serves as a deterministic comp
 
 ## 🚀 Quick Start: Installation & Uninstallation
 
-Since this is a public repository, you can set up or tear down the orchestrator using automated PowerShell one-liners in your local terminal:
+Since this is a public repository, you can set up or tear down the orchestrator using automated one-liners in your local terminal:
 
-### One-Line Install
-Open PowerShell and run the following command to verify dependencies, download, and clone the engine:
+### 1. One-Line Install
+
+#### Windows (PowerShell):
 ```powershell
 irm https://raw.githubusercontent.com/tysongoulding/appFactory/main/scripts/install.ps1 | iex
 ```
 
-### One-Line Uninstall
-To completely remove the orchestrator directory and clean up:
+#### macOS & Linux (Bash/Zsh):
+```bash
+curl -sSL https://raw.githubusercontent.com/tysongoulding/appFactory/main/scripts/install.sh | bash
+```
+
+### 2. One-Line Uninstall
+
+#### Windows (PowerShell):
 ```powershell
 irm https://raw.githubusercontent.com/tysongoulding/appFactory/main/scripts/uninstall.ps1 | iex
+```
+
+#### macOS & Linux (Bash/Zsh):
+```bash
+curl -sSL https://raw.githubusercontent.com/tysongoulding/appFactory/main/scripts/uninstall.sh | bash
 ```
 *Note: Any laterally spawned application sandboxes parallel to the factory are safely preserved to prevent custom source code deletion. You can manually remove those when desired.*
 
