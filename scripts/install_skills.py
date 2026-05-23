@@ -83,6 +83,44 @@ To spawn a new application, execute the spawning orchestrator command:
         except Exception as e:
             print(f"Skipped system-wide Claude install: {e}")
 
+    # Also attempt to copy to system-wide ~/.gemini/config/skills or ~/.gemini/antigravity/skills if directories exist
+    gemini_config_skills = os.path.join(home_dir, ".gemini", "config", "skills")
+    gemini_antigravity_skills = os.path.join(home_dir, ".gemini", "antigravity", "skills")
+    
+    gemini_skill_content = """---
+name: appfactory-spawner
+description: Compiles and spawns isolated, self-contained application sandboxes parallel (lateral) to the App Factory orchestrator directory using spawn_app.py.
+risk: low
+source: local
+date_added: '2026-05-22'
+---
+
+# App Factory Spawner Skill
+
+This skill provides an automated pipeline to compile new, isolated mobile application sandboxes sibling to the factory.
+
+## Actions
+To spawn a new application, execute the spawning orchestrator command:
+`python scripts/spawn_app.py --codename <Name> --platform <Platform> [--template <Template>]`
+
+## Features
+- Phase 1: Ingests parameters and generates blueprint.json
+- Phase 2: Clones selected templates laterally
+- Phase 3: Injects context perimeters (.cursorrules, agent.md) and runs git init
+- Phase 4: Configures localized CI/CD Fastlane Match and Vault OIDC permissions
+"""
+
+    for target_dir in [gemini_config_skills, gemini_antigravity_skills]:
+        if os.path.exists(target_dir):
+            try:
+                dest_dir = os.path.join(target_dir, "appfactory-spawner")
+                os.makedirs(dest_dir, exist_ok=True)
+                with open(os.path.join(dest_dir, "SKILL.md"), "w", encoding="utf-8") as f:
+                    f.write(gemini_skill_content)
+                log_ok(f"Installed appfactory-spawner skill to Gemini/Antigravity path: {dest_dir}")
+            except Exception as e:
+                print(f"Skipped Gemini/Antigravity skill install: {e}")
+
     # 4. AI System Prompt (AWS Kiro, Codex, Conductor, Superset, Opencode)
     system_prompt = """# App Factory System Prompt Instructions
 
