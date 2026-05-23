@@ -48,34 +48,34 @@ To prevent context drift, token cross-pollination, and directory fragmentation, 
 
 ## 🔄 The Ingestion Production Line
 
-When asked to generate a new software idea, the factory executes the following four sequential phases without human intervention:
+When asked to generate a new software idea, the factory executes the following four sequential phases without human intervention, aligned with the chronological Discovery-to-Deployment sequence:
 
 ```
 [ Prompt / Spec ] ──> (1) Phase 1: Manifest Synthesis ──> Generates blueprint.json
-                                                               │
-┌──────────────────────────────────────────────────────────────┘
-│
-├──> (2) Phase 2: Hydrolysis & Workspace Cloning ──> Spawns lateral sibling folder & copies template
-│
-├──> (3) Phase 3: Perimeter Injection ──> Drops .cursorrules / agent.md & runs git init
-│
-└──> (4) Phase 4: Dynamic CI/CD Provisioning ──> Generates local workflows, Fastlane Match & Vault OIDC
+                                                                │
+ ┌──────────────────────────────────────────────────────────────┘
+ │
+ ├──> (2) Phase 2: Hydrolysis & Workspace Cloning ──> Spawns lateral sibling folder & copies template
+ │
+ ├──> (3) Phase 3: Perimeter Injection ──> Drops .cursorrules / agent.md & runs git init
+ │
+ └──> (4) Phase 4: Dynamic CI/CD Provisioning ──> Generates local workflows, Fastlane Match & Vault OIDC
 ```
 
 ### 1. Phase 1: Manifest Synthesis (Plan)
-The Product Architect translates high-level prompts into a single structured configuration document (`blueprint.json`) defining the application's core relational data models, page routing tables, styling tokens (Google Fonts `Outfit`/`Inter` and Brand Green `#34A853`), and bundle identifiers.
+The Factory Manager translates high-level prompts into a single structured configuration document (`blueprint.json`) defining the application's core relational data models, page routing tables, styling tokens (Google Fonts `Outfit`/`Inter` and Brand Green `#34A853`), and bundle identifiers, adhering to the **Strategy & Research** and **Design & Architecture** stage specifications.
 
 ### 2. Phase 2: Hydrolysis & Workspace Cloning (Spawn)
-The API Engineer and UI Component Generator copy pristine starter templates (`/templates`) into a brand-new lateral directory parallel to the factory. They execute an internal string-replacement engine to bind unique bundle IDs, app names, and repository paths directly into the code and configuration files.
+Pristine starter templates (`/templates`) are copied into a brand-new lateral directory parallel to the factory. An internal string-replacement engine binds unique bundle IDs, app names, and repository paths directly into the code and configuration files.
 
 ### 3. Phase 3: Perimeter Injection (Jail Context)
-The UI Component Generator drops context boundary perimeters at the sandbox root:
+Context boundary perimeters are dropped at the sandbox root:
 *   `.cursorrules`: Enforces strict Absolute Path Containment, preventing developer agents from exiting the sandbox.
-*   `agent.md`: The primary local system prompt outlining HSL dark modes (`#0B0F19`), GCS storage paths, and local SQLite persistence.
+*   `agent.md`: The primary local system prompt detailing the chronological 12-agent sequence, HSL dark modes (`#0B0F19`), GCS storage paths, and local SQLite persistence.
 *   The sandbox is then initialized as an independent repository (`git init`) with its own initial commit to establish a distinct history.
 
 ### 4. Phase 4: Dynamic CI/CD Provisioning (Integrate)
-The API Engineer copies localized workflow configurations inside `.github/workflows/pipeline.yml` and Fastlane configurations (`Appfile`/`Fastfile`). It provisions dynamic Vault roles and policies (`secret/data/app-factory/app-x/*`) mapped to the sandbox's dedicated remote GitHub repository and registers code-signing parameters.
+Localized workflow configurations inside `.github/workflows/pipeline.yml` and Fastlane configurations (`Appfile`/`Fastfile`) are injected. The **DevOps Automator** configures dynamic Vault roles and policies (`secret/data/app-factory/app-x/*`) mapped to the sandbox's dedicated remote GitHub repository and registers code-signing parameters.
 
 ---
 
@@ -107,11 +107,28 @@ python scripts/spawn_app.py --codename Horizon --platform iOS
 
 ---
 
-## 🛡️ Code Quality & Quality Gatekeeper (Vibecop Audits)
+## 🛡️ Code Quality, Security & Workflow Gates
 
-To guarantee software integrity across dozens of applications, the **Quality Gatekeeper** enforces strict AI code quality standards utilizing the **Vibecop** MCP server:
+To guarantee absolute software safety, quality, and maintainability across dozens of applications, the development lifecycle enforces strict branch gates and AI code quality standards:
 
-*   **Gatekeeper Audits**: During Phase 3/4 validation, the gatekeeper automatically triggers a `vibecop_scan` across the sandbox directory.
+### 1. The Workflow Gate Rule
+> [!CAUTION]
+> **MAIN BRANCH PROTECTION RULE**:
+> **Never let the Mobile App Builder push code directly to main.**
+> The execution loop must always route changes through the **Security Engineer** and **Code Reviewer**, leaving the **Git Workflow Master** to handle the merge and trigger the **DevOps Automator**.
+
+```
+[ Mobile App Builder ] ──(feature branch)──> [ Security Engineer ] (Audits & Threat Scan)
+                                                     │
+                                           [ Code Reviewer ] (Lints & Performance check)
+                                                     │
+                                           [ Git Workflow Master ] (Merges to main)
+                                                     │
+                                           [ DevOps Automator ] (Triggers fastlane release)
+```
+
+### 2. Vibecop Audits & Compliance
+*   **Security & Review Gate**: During the Gating Phase, the **Security Engineer** triggers a `vibecop_scan` across the sandbox directory to verify code quality.
 *   **Strict Blocking Policy**: Builds are blocked and branch merges are refused on any codebase containing unencrypted credential keys or unresolved `warning`/`critical` findings (such as cyclomatic complexity warnings or `god-function` alerts).
 *   **Developer Rule**: Downstream developers opening a sandbox workspace are governed by the local [`agent.md`](templates/perimeter/agent.md) context, which strictly instructs them to run `vibecop_scan` and resolve any warnings before staging changes.
 

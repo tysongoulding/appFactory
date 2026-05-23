@@ -1,47 +1,87 @@
 # App Factory Orchestration Framework (AGENTS.md)
 
-This file defines the Multi-Agent Orchestration Hierarchy and governance models governing the App Factory. It is the root orchestration contract that outlines how the system agents collaborate to manage the lifecycle of the 30 application sub-repositories.
+This file defines the Multi-Agent Orchestration Hierarchy and governance models governing the App Factory. It is the root orchestration contract that outlines how the system agents collaborate to manage the lifecycle of the application sub-repositories.
 
 ---
 
 ## 🎭 The Orchestration Hierarchy
 
-The App Factory operates using a delegated hierarchy of specialized agents. Their personas, scopes of work, and system prompts are inherited directly from the local `lib/agents` library.
+The App Factory operates using a chronological, 5-stage production pipeline of 12 specialized agents. Their personas, scopes of work, and prompts are inherited directly from the local `lib/agents/` library.
 
 ```mermaid
 graph TD
-    FM[Factory Manager System Agent] --> LA[Lead Architect Backend Architect]
-    FM --> PO[Pipeline Orchestrator DevOps Automator]
-    FM --> QG[Quality Gatekeeper Threat Detection Engineer]
+    FM[Factory Manager System Agent] --> Strategy[1. Strategy & Research]
+    FM --> Design[2. Design & Architecture]
+    FM --> Prototyping[3. Prototyping & Build]
+    FM --> Quality[4. Quality, Security & Review]
+    FM --> Release[5. Automation & Release]
     
-    LA --> MAB[Mobile App Builder app-x]
-    PO --> CI[CI/CD Pipelines & Vault OIDC]
-    QG --> Audit[Audit & Pre-Merge Gate]
+    Strategy --> UXR[UX Researcher]
+    Strategy --> BG[Brand Guardian]
+    Strategy --> GH[Growth Hacker]
+    
+    Design --> UID[UI Designer]
+    Design --> UXA[UX Architect]
+    
+    Prototyping --> RP[Rapid Prototyper]
+    Prototyping --> MAB[Mobile App Builder]
+    
+    Quality --> SE[Security Engineer]
+    Quality --> CR[Code Reviewer]
+    Quality --> GWM[Git Workflow Master]
+    
+    Release --> RC[Reality Checker]
+    Release --> DA[DevOps Automator]
 ```
 
-### 1. The Factory Manager (System Agent)
-*   **Role**: Factory Coordinator & Process Monitor
-*   **Mission**: Monitors `manifest.md`, orchestrates worktree creation, handles multi-agent spawns, and maintains execution state.
-*   **Prompt Link**: Root-level System definition (see [Factory Manager System prompt](#factory-manager-specification) below).
+---
 
-### 2. The Lead Architect
-*   **Specialty**: [Backend Architect](lib/agents/engineering/engineering-backend-architect.md)
-*   **Mission**: Defines the monorepo structure, manages the global contract in `manifest.md`, and dictates the architecture that every app must inherit.
-*   **Critical Rule**: Must refuse any pull request or spawn that violates the "Global Technical Contract" (e.g., non-GCS storage, custom color codes outside brand green `#34A853`).
+## ⚡ The Agentic Pipeline Sequence
 
-### 3. The Pipeline Orchestrator
-*   **Specialty**: [DevOps Automator](lib/agents/engineering/engineering-devops-automator.md)
-*   **Mission**: Configures reusable GitHub Actions workflows, sets up HashiCorp Vault authentication, designs OIDC policies, and runs the Skill Accumulation system.
-*   **Critical Rule**: Every newly spawned app subdirectory must have a corresponding, strictly scoped policy created in Vault before the validation stage.
+Structuring our agents in a chronological Discovery-to-Deployment sequence ensures that design satisfies the user, architecture supports scale, security gates the code, and automation handles the release.
 
-### 4. The Quality Gatekeeper
-*   **Specialty**: [Threat Detection Engineer](lib/agents/engineering/engineering-threat-detection-engineer.md) & [Reality Checker](lib/agents/testing/testing-reality-checker.md)
-*   **Mission**: Automatically audits every lateral sandbox directory for security regressions, hardcoded secrets, or code quality issues.
-*   **Critical Rule**: Triggers the `vibecop_scan` tool to verify that the sandbox codebase meets standard code quality thresholds. Blocks merges on any codebase containing unencrypted credential keys or unresolved warning/critical quality issues.
+### 1. Strategy & Research: Discovery Phase
+*   **🔍 UX Researcher**: Validates user behavior, analyzes friction points, and provides the usability insights needed before a single line of UI is drawn.
+*   **🎭 Brand Guardian**: Establishes the visual identity, brand guidelines, and market positioning to ensure the product aligns with company goals.
+*   **🚀 Growth Hacker**: Designs user acquisition strategies and integrates product-led growth loops into the core application flow early.
 
-### 5. Specialized Mobile App Builders
-*   **Specialty**: [Mobile App Builder](lib/agents/engineering/engineering-mobile-app-builder.md)
-*   **Mission**: Spawned dynamically in isolated contexts (submodules/worktrees) to write code, design user interfaces matching the premium design spec, and deliver feature-complete packages.
+### 2. Design & Architecture: Foundational Phase
+*   **🎯 UI Designer**: Translates research into visual layouts, builds out component libraries, and maintains strict design system consistency.
+*   **🏛️ UX Architect**: Bridges the gap between design and engineering. Translates UI components into developer-friendly layouts, structural foundations, and clean CSS/styling systems.
+
+### 3. Implementation & Prototyping: Execution Phase
+*   **⚡ Rapid Prototyper**: Drives fast iteration cycles, building out quick-and-dirty proof-of-concepts to test features and user interactions immediately.
+*   **📱 Mobile App Builder**: The core execution engine. Builds robust native (Swift/Kotlin) or cross-platform (React Native/Flutter) functional application code.
+
+### 4. Quality, Security & Review: Gating Phase
+*   **🔒 Security Engineer**: Conducts threat modeling, secure code reviews, and ensures cryptography or storage mechanisms protect user data locally.
+*   **👁️ Code Reviewer**: Evaluates PRs for maintainability, technical debt, and adherence to performance standards.
+*   **🌿 Git Workflow Master**: Enforces branching strategies, strict conventional commit formatting, and multi-developer repository alignment.
+
+### 5. Automation & Release: Delivery Phase
+*   **🔍 Reality Checker**: Acts as the final quality gate, rigorously verifying acceptance criteria against the business requirements before any production release.
+*   **🚀 DevOps Automator**: Manages the cloud infrastructure, sets up fastlane delivery tracks, and maintains the CI/CD pipeline for TestFlight and Google Play internal testing.
+
+---
+
+## 🔒 The Workflow Gate Rule
+
+To ensure absolute safety and maintainability across all generated sandboxes, the execution loop must enforce a hard constraint on the development pathway:
+
+> [!CAUTION]
+> **MAIN BRANCH PROTECTION RULE**:
+> **Never let the Mobile App Builder push code directly to main.**
+> The execution loop must always route changes through the **Security Engineer** and **Code Reviewer**, leaving the **Git Workflow Master** to handle the merge and trigger the **DevOps Automator**.
+
+```
+[ Mobile App Builder ] ──(feature branch)──> [ Security Engineer ] (Audits & Threat Scan)
+                                                     │
+                                           [ Code Reviewer ] (Lints & Performance check)
+                                                     │
+                                           [ Git Workflow Master ] (Merges to main)
+                                                     │
+                                           [ DevOps Automator ] (Triggers fastlane release)
+```
 
 ---
 
@@ -93,7 +133,7 @@ sequenceDiagram
 *   They execute an internal string-replacement engine to bind unique bundle IDs, app names, and repository paths directly into the source files.
 
 ### Phase 3: Perimeter Injection (Jail Context)
-*   The **UI Component Generator** drops a specialized `.cursorrules` file, an `agent.md` system context file, and a custom `README.md` into the root of the sandbox.
+*   The **UI Component Generator** drops a specialized `.cursorrules` file, an `agent.md` system context file, and a standard README.md into the root of the sandbox.
 *   It initializes a fresh, local Git repository (`git init`) to start a distinct, completely decoupled Git history.
 
 ### Phase 4: Dynamic CI/CD Provisioning (Integrate)

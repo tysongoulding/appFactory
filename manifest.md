@@ -1,12 +1,12 @@
 # App Factory Monorepo Manifest
 
-This manifest is the canonical contract for all sub-repository applications managed within the App Factory. It is read and enforced by the **Lead Architect** and **Factory Manager** agents to orchestrate workspace initialization, template spawning, quality checks, and integration.
+This manifest is the canonical contract for all sub-repository applications managed within the App Factory. It is read and enforced by the **Factory Manager** to orchestrate workspace initialization, template spawning, quality checks, and integration.
 
 ---
 
 ## 📜 Global Technical Contract
 
-All applications generated and maintained in this monorepo MUST comply with the following architectural, design, and security specifications. Any deviation will be flagged by the **Quality Gatekeeper (Threat Detection Engineer)** and block integration.
+All applications generated and maintained in this monorepo MUST comply with the following architectural, design, and security specifications. Any deviation will be flagged during the **Quality, Security & Review (Gating Phase)** by the **Security Engineer** and block integration.
 
 ### 1. Architectural Integrity
 *   **Decoupled State**: No app is permitted to import or share code directly from another app directory. Contexts must remain completely isolated.
@@ -45,11 +45,12 @@ The Factory Manager tracks the lifecycle of all generated apps using the matrix 
 | `app-04` | Quasar | Cross-Platform | Mobile App Builder Delta | `Integrated` | `../app-04-quasar` | `app-04-quasar-policy` |
 | `app-05` | Horizon | iOS | Mobile App Builder Epsilon | `Integrated` | `../app-05-horizon` | `app-05-horizon-policy` |
 | `app-06` | Spectra | Android | Mobile App Builder Zeta | `Integrated` | `../app-06-spectra` | `app-06-spectra-policy` |
+| `app-07` | Eclipse | Android | Mobile App Builder Eta | `Integrated` | `../app-07-eclipse` | `app-07-eclipse-policy` |
 
 
 ---
 
 ## 🛠️ Update Trigger Rules
 
-1. **Manifest Mutations**: When the Lead Architect updates this manifest (e.g. changing status of `app-01` to `Spawning`), the Factory Manager reads the updated table, checks for diffs, and executes a delegation command using `AGENTS.md` parameters.
-2. **Global Rules Changes**: If any brand colors, fonts, or policy variables are updated in the "Global Technical Contract" section, the Pipeline Orchestrator executes a workspace-wide check and triggers a re-validation script on all active sub-directories.
+1. **Manifest Mutations**: When a new application is added or updated in this manifest, the Factory Manager reads the updated table, checks for diffs, and executes a delegation command using `AGENTS.md` parameters.
+2. **Global Rules Changes**: If any brand colors, fonts, or policy variables are updated in the "Global Technical Contract" section, the **DevOps Automator** executes a workspace-wide check and triggers a re-validation script on all active sub-directories.

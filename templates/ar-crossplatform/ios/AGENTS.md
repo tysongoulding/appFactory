@@ -3,10 +3,8 @@
 This agent manifest inherits from the root `/AGENTS.md` configuration and defines the execution constraints for this application.
 
 ## 🚀 Inherited Context
-*   **Root Governance**: [Global Governance Architecture](../../AGENTS.md)
-*   **Lead Architect Prompts**: [Backend Architect](../../lib/agents/engineering/engineering-backend-architect.md)
-*   **Pipeline Orchestrator Prompts**: [DevOps Automator](../../lib/agents/engineering/engineering-devops-automator.md)
-*   **Assigned Specialist**: [Mobile App Builder](../../lib/agents/engineering/engineering-mobile-app-builder.md)
+*   **Root Governance**: [Global Governance Architecture](../../AGENTS.md) (Chronological 5-stage, 12-agent pipeline)
+*   **Gated Workflow Policy**: Enforces strict main-branch protection. Mobile App Builder commits must route through the Security Engineer and Code Reviewer, merged by the Git Workflow Master, and deployed by the DevOps Automator.
 
 ## 📌 Local Application Compliance Rules
 
