@@ -30,7 +30,15 @@ else
     echo -e "${YELLOW}Orchestrator directory '$DEST_FOLDER' was not found in the current directory.${NC}"
 fi
 
-# 2. Inform user about sibling sandboxes
+# 2. Remove system-wide Claude Code Skill if present
+CLAUDE_SKILL_PATH="$HOME/.claude/skills/appfactory-spawner.md"
+if [ -f "$CLAUDE_SKILL_PATH" ]; then
+    echo -e "${CYAN}Removing system-wide Claude Code skill '$CLAUDE_SKILL_PATH'...${NC}"
+    rm -f "$CLAUDE_SKILL_PATH"
+    echo -e "${GREEN}[OK] System-wide Claude Code skill removed.${NC}"
+fi
+
+# 3. Inform user about sibling sandboxes
 echo ""
 echo -e "${YELLOW}Note: Any laterally spawned application sandboxes parallel to '$DEST_FOLDER' (such as ../app-xx-codename) remain intact to protect your custom code. You can manually delete those folders if no longer needed.${NC}"
 echo -e "${RED}[OK] Uninstallation complete.${NC}"

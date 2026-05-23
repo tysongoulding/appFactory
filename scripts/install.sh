@@ -36,6 +36,16 @@ else
     git clone "$REPO_URL" "$DEST_FOLDER"
 fi
 
+# 4. Install AI Editor & Agent Skills
+echo -e "${CYAN}Configuring AI editor rules and agent skills...${NC}"
+if [ -f "$DEST_FOLDER/scripts/install_skills.py" ]; then
+    if command -v python3 &> /dev/null; then
+        python3 "$DEST_FOLDER/scripts/install_skills.py"
+    else
+        python "$DEST_FOLDER/scripts/install_skills.py"
+    fi
+fi
+
 echo ""
 echo -e "${GREEN}[OK] Isolated App Factory Engine successfully installed!${NC}"
 echo -e "${YELLOW}Navigate into the directory to begin spawning apps:${NC}"

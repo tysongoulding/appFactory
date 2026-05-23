@@ -27,6 +27,12 @@ if (Test-Path $DestFolder) {
     git clone $RepoUrl $DestFolder
 }
 
+# 4. Install AI Editor & Agent Skills
+Write-Host "Configuring AI editor rules and agent skills..." -ForegroundColor Cyan
+if (Test-Path "$DestFolder\scripts\install_skills.py") {
+    python "$DestFolder\scripts\install_skills.py"
+}
+
 Write-Host ""
 Write-Host "[OK] Isolated App Factory Engine successfully installed!" -ForegroundColor Green
 Write-Host "Navigate into the directory to begin spawning apps:" -ForegroundColor Yellow
