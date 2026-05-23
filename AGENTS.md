@@ -36,8 +36,8 @@ graph TD
 
 ### 4. The Quality Gatekeeper
 *   **Specialty**: [Threat Detection Engineer](lib/agents/engineering/engineering-threat-detection-engineer.md) & [Reality Checker](lib/agents/testing/testing-reality-checker.md)
-*   **Mission**: Automatically audits every `apps/app-x` directory for security regressions, hardcoded secrets, or CI/CD misconfigurations.
-*   **Critical Rule**: Blocks merges on any branch containing custom workflow files that override the central reusable configurations, or any codebase containing unencrypted credential keys.
+*   **Mission**: Automatically audits every lateral sandbox directory for security regressions, hardcoded secrets, or code quality issues.
+*   **Critical Rule**: Triggers the `vibecop_scan` tool to verify that the sandbox codebase meets standard code quality thresholds. Blocks merges on any codebase containing unencrypted credential keys or unresolved warning/critical quality issues.
 
 ### 5. Specialized Mobile App Builders
 *   **Specialty**: [Mobile App Builder](lib/agents/engineering/engineering-mobile-app-builder.md)
