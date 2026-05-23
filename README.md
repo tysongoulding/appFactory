@@ -1,89 +1,72 @@
-# 🏭 App Factory Monorepo
+# 🏭 The Isolated App Factory Engine
 
-Welcome to the **App Factory**, a highly automated monorepo designed to scale the creation, testing, security auditing, and deployment of 30 isolated mobile applications. This factory uses the **agency-agents** orchestration paradigm, where specialized AI agents hold specific controller roles and manage the lifecycle of each application subdirectory.
+Welcome to the **App Factory Orchestration Engine**—a centralized, read-only orchestration pipeline designed to ingest high-level software prompts and compile them into fully operational, self-contained, and completely isolated mobile application sandboxes (iOS and Android). 
 
----
-
-## 🏗️ Factory Architecture & Roles
-
-The App Factory runs on a hierarchy of specialized AI personas defined under `lib/agents/engineering/`. These agents collaborate based on the rules outlined in `AGENTS.md` and track state using `manifest.md`.
-
-### 👥 The Core Agent Team
-
-| Role | Agency Agent File | Primary Mandate |
-| :--- | :--- | :--- |
-| **Factory Manager** | `AGENTS.md` (Root System Agent) | Orchestrates workspace spawning, directory mapping, and lifecycle steps. |
-| **Lead Architect** | [`engineering-backend-architect.md`](lib/agents/engineering/engineering-backend-architect.md) | Enforces the global technical contract, structure, and database/storage decisions. |
-| **Pipeline Orchestrator** | [`engineering-devops-automator.md`](lib/agents/engineering/engineering-devops-automator.md) | Generates GitHub Actions workflows, provisions HashiCorp Vault access, and OIDC claims. |
-| **Quality Gatekeeper** | [`engineering-threat-detection-engineer.md`](lib/agents/engineering/engineering-threat-detection-engineer.md) | Runs static security analysis and prevents credential leaks before merging branches. |
-| **Mobile App Builder** | [`engineering-mobile-app-builder.md`](lib/agents/engineering/engineering-mobile-app-builder.md) | Assigned to isolated app worktrees to build premium user interfaces (Google Brand Green `#34A853`, Inter/Outfit fonts). |
+Using the **agency-agents** paradigm, the factory serves as a deterministic compiler, remaining structurally decoupled from the applications it generates.
 
 ---
 
-## 🔄 The Production Line Pattern
+## 🏗️ Topographical Strategy & Lateral Sandboxes
 
-To initialize, configure, and integrate a new app, follow the automated production line phases:
+To prevent context drift, token cross-pollination, and directory fragmentation, the monorepo enforces a strict **lateral workspace structure**:
 
-```
-[ manifest.md ] ──(Spawning Status)──> [ Factory Manager ]
-                                             │
-                                   (1) Plan: Create worktree / Write specs
-                                             │
-                                   (2) Spawn: Clone template folder
-                                             │
-                                   (3) Validate: Vault/OIDC and Security Scan
-                                             │
-                                   (4) Integrate: Push feature/app-* & merge
-```
-
-### 1. Workspace Initialization & Planning
-When an app status shifts to `Spawning` in `manifest.md`, the **Lead Architect** spawns an isolated workspace for that app:
-```bash
-# Create an isolated Git worktree for the app
-git worktree add apps/app-01-nebula -b feature/app-01-nebula
-```
-This isolates the codebase so the **Mobile App Builder** assigned to `app-01-nebula` has zero visibility into adjacent apps, keeping build files and cache namespaces separated.
-
-### 2. Spawning the Template
-The **Pipeline Orchestrator** replicates the appropriate project structure from `/templates` into the isolated workspace:
-*   `/templates/ios`: Swift / SwiftUI boilerplates with custom styling rules.
-*   `/templates/android`: Kotlin / Jetpack Compose boilerplates.
-*   `/templates/workflows`: Reusable workflows and caller configurations.
-
-### 3. Vault & OIDC Configuration
-To maintain a strict "Secret Zero" policy, the **Pipeline Orchestrator** runs `vault/setup_vault_oidc.sh` to configure OpenID Connect (OIDC) access:
-1.  Mounts the JWT auth engine to trust GitHub Actions: `https://token.actions.githubusercontent.com`.
-2.  Creates a Vault Policy limiting the app to its path: `secret/data/app-factory/app-01-nebula/*`.
-3.  Binds a JWT role mapping the GitHub runner to that policy based on repository name (`org/appFactory`) and the branch pattern (`refs/heads/feature/app-01-nebula`).
-
-### 4. Gatekeeper Validation & Merge
-Before a pull request can be merged:
-1.  The **Quality Gatekeeper** runs verification checks (linting, OIDC workflow audits, scanning for hardcoded secrets).
-2.  Upon approval, changes are merged into the target branch, and the GitHub runner retrieves the API endpoints dynamically from Vault to run compilation.
+*   **Core App Factory (The Orchestrator)**: The `appFactory` folder contains pristine starter seeds (`/templates`), OIDC deployment blueprints, and specialized generation personas. It holds **no application-specific code** or nested workspace logic.
+*   **Generated Applications (The Sandboxes)**: Spawned laterally/parallel to the factory root (e.g. `../app-05-horizon`). Each sandbox represents a completely autonomous Git repository (`git init`) containing its own independent frontend client, isolated backend server, local GitHub Actions pipelines, Fastlane configurations, and distinct Git history.
 
 ---
 
-## 📈 Skill Accumulation (Agent Skills)
+## 🔄 The Ingestion Production Line
 
-As bug fixes or configuration enhancements are resolved in individual applications, they are codified in `/lib/agents/scripts/skills/`. The **Pipeline Orchestrator** reads these definitions and automatically propagates the fixes across all other active application contexts.
+When asked to generate a new software idea, the factory executes the following four sequential phases without human intervention:
+
+```
+[ Prompt / Spec ] ──> (1) Phase 1: Manifest Synthesis ──> Generates blueprint.json
+                                                               │
+┌──────────────────────────────────────────────────────────────┘
+│
+├──> (2) Phase 2: Hydrolysis & Workspace Cloning ──> Spawns lateral sibling folder & copies template
+│
+├──> (3) Phase 3: Perimeter Injection ──> Drops .cursorrules / agent.md & runs git init
+│
+└──> (4) Phase 4: Dynamic CI/CD Provisioning ──> Generates local workflows, Fastlane Match & Vault OIDC
+```
+
+### 1. Phase 1: Manifest Synthesis (Plan)
+The Product Architect translates high-level prompts into a single structured configuration document (`blueprint.json`) defining the application's core relational data models, page routing tables, styling tokens (Google Fonts `Outfit`/`Inter` and Brand Green `#34A853`), and bundle identifiers.
+
+### 2. Phase 2: Hydrolysis & Workspace Cloning (Spawn)
+The API Engineer and UI Component Generator copy pristine starter templates (`/templates`) into a brand-new lateral directory parallel to the factory. They execute an internal string-replacement engine to bind unique bundle IDs, app names, and repository paths directly into the code and configuration files.
+
+### 3. Phase 3: Perimeter Injection (Jail Context)
+The UI Component Generator drops context boundary perimeters at the sandbox root:
+*   `.cursorrules`: Enforces strict Absolute Path Containment, preventing developer agents from exiting the sandbox.
+*   `agent.md`: The primary local system prompt outlining HSL dark modes (`#0B0F19`), GCS storage paths, and local SQLite persistence.
+*   The sandbox is then initialized as an independent repository (`git init`) with its own initial commit to establish a distinct history.
+
+### 4. Phase 4: Dynamic CI/CD Provisioning (Integrate)
+The API Engineer copies localized workflow configurations inside `.github/workflows/pipeline.yml` and Fastlane configurations (`Appfile`/`Fastfile`). It provisions dynamic Vault roles and policies (`secret/data/app-factory/app-x/*`) mapped to the sandbox's dedicated remote GitHub repository and registers code-signing parameters.
 
 ---
 
-## 🚀 How to Run the Agents
+## 🚀 Spawning a New Application Dynamically
 
-### A. Using Claude Code (Recommended)
-Add the agents to your Claude Code configuration:
-```bash
-cp lib/agents/engineering/*.md ~/.claude/agents/
-```
-In your session, activate them explicitly:
-*   *“Hey Claude, activate Backend Architect mode and audit manifest.md”*
-*   *“Hey Claude, activate DevOps Automator mode and provision OIDC for app-02-orbital”*
+To compile a new application dynamically, run `spawn_app.py` with the `--codename` and `--platform` (choices: `iOS`, `Android`, `Cross-Platform`) parameters:
 
-### B. Using Cursor (.cursorrules)
-Run the install script to generate and link `.mdc` rule files:
-```bash
-./lib/agents/scripts/install.sh --tool cursor
+```powershell
+python scripts/spawn_app.py --codename Horizon --platform iOS
 ```
-Reference them in Cursor composer or chat:
-*   *“Use @engineering-security-engineer to audit the caller workflows in templates/workflows”*
+
+### Automatic Orchestration Flow:
+1.  **Next available ID**: Scans existing entries in [`manifest.md`](manifest.md), auto-calculates the next available ID (e.g. `app-05`), and assigns the next builder agent dynamically using the Greek alphabet (e.g. `Mobile App Builder Epsilon`).
+2.  **Manifest Appending**: Appends the new tracking row to the table matrix in `manifest.md` on-the-fly.
+3.  **Lateral Compilation**: Spawns the sandbox at `C:\repo\personal\app-05-horizon`, copies iOS template seeds, injects perimeter files, writes custom `blueprint.json`, generates Fastlane setups, runs `git init`, and configures OIDC authentication.
+
+---
+
+## 🛡️ Code Quality & Quality Gatekeeper (Vibecop Audits)
+
+To guarantee software integrity across dozens of applications, the **Quality Gatekeeper** enforces strict AI code quality standards utilizing the **Vibecop** MCP server:
+
+*   **Gatekeeper Audits**: During Phase 3/4 validation, the gatekeeper automatically triggers a `vibecop_scan` across the sandbox directory.
+*   **Strict Blocking Policy**: Builds are blocked and branch merges are refused on any codebase containing unencrypted credential keys or unresolved `warning`/`critical` findings (such as cyclomatic complexity warnings or `god-function` alerts).
+*   **Developer Rule**: Downstream developers opening a sandbox workspace are governed by the local [`agent.md`](templates/perimeter/agent.md) context, which strictly instructs them to run `vibecop_scan` and resolve any warnings before staging changes.
