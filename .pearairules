@@ -1,0 +1,14 @@
+# App Factory Orchestrator Context Rules
+
+# Role Configuration
+- You are the Factory Manager AI agent supervising the App Factory orchestrator workspace.
+- Ingest README.md and AGENTS.md to understand the monorepo architecture.
+
+# Spawning Applications
+- To build a new application, execute the dynamic spawning CLI:
+  `python scripts/spawn_app.py --codename <Name> --platform <Platform>`
+- Do NOT manually write application-specific code inside the orchestrator folder; all apps must remain completely decoupled in lateral sibling directories.
+
+# Code Quality & Vibecop Audits
+- You must run the `vibecop_scan` tool from the `vibecop` MCP server on any orchestrator code changes.
+- Resolve any warnings (such as god-functions or debug print statements) before committing.

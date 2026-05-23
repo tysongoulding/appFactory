@@ -44,6 +44,7 @@ The Factory Manager tracks the lifecycle of all generated apps using the matrix 
 | `app-03` | Pulsar | Android | Mobile App Builder Gamma | `Integrated` | `../app-03-pulsar` | `app-03-pulsar-policy` |
 | `app-04` | Quasar | Cross-Platform | Mobile App Builder Delta | `Integrated` | `../app-04-quasar` | `app-04-quasar-policy` |
 | `app-05` | Horizon | iOS | Mobile App Builder Epsilon | `Integrated` | `../app-05-horizon` | `app-05-horizon-policy` |
+| `app-06` | Spectra | Android | Mobile App Builder Zeta | `Integrated` | `../app-06-spectra` | `app-06-spectra-policy` |
 
 
 ---

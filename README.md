@@ -81,8 +81,21 @@ The API Engineer copies localized workflow configurations inside `.github/workfl
 
 ## 🚀 Spawning a New Application Dynamically
 
-To compile a new application dynamically, run `spawn_app.py` with the `--codename` and `--platform` (choices: `iOS`, `Android`, `Cross-Platform`) parameters:
+To compile a new application dynamically, run `spawn_app.py` or use the dynamic command trigger `/create-appFactory-app` (via the included `create-appFactory-app` wrapper) with the `--codename` and `--platform` (choices: `iOS`, `Android`, `Cross-Platform`) parameters:
 
+### Using the Shorthand Trigger (`/create-appFactory-app`):
+
+#### Windows (Command Shortcut):
+```powershell
+.\create-appFactory-app.bat --codename Horizon --platform iOS
+```
+
+#### macOS & Linux (Command Shortcut):
+```bash
+./create-appFactory-app --codename Horizon --platform iOS
+```
+
+### Direct Python Invocation:
 ```powershell
 python scripts/spawn_app.py --codename Horizon --platform iOS
 ```
@@ -101,3 +114,19 @@ To guarantee software integrity across dozens of applications, the **Quality Gat
 *   **Gatekeeper Audits**: During Phase 3/4 validation, the gatekeeper automatically triggers a `vibecop_scan` across the sandbox directory.
 *   **Strict Blocking Policy**: Builds are blocked and branch merges are refused on any codebase containing unencrypted credential keys or unresolved `warning`/`critical` findings (such as cyclomatic complexity warnings or `god-function` alerts).
 *   **Developer Rule**: Downstream developers opening a sandbox workspace are governed by the local [`agent.md`](templates/perimeter/agent.md) context, which strictly instructs them to run `vibecop_scan` and resolve any warnings before staging changes.
+
+---
+
+## 🔌 AI Editor & Agent Skill Integrator
+
+To load the App Factory's system persona and spawner capabilities system-wide or inside your AI editor, execute the unified skill installer script:
+
+```bash
+python scripts/install_skills.py
+```
+
+### Supported Environments:
+1.  **Antigravity & Claude Code**: Generates and registers an `agentskills`-compliant `SKILL.md` block locally and system-wide (`~/.claude/skills/`).
+2.  **Cursor, Windsurf, PearAI, Trae**: Generates local context rule files (`.cursorrules`, `.windsurfrules`, `.pearairules`, `.traerules`) inside the workspace to anchor AI agents.
+3.  **Aider**: Generates a customized `.aider.conf.yml` specifying the Factory Manager system prompt.
+4.  **AWS Kiro, Codex, Conductor, Superset, Opencode**: Generates a unified `AI_SYSTEM_PROMPT.md` at the orchestrator root that can be imported by these agents at runtime.
